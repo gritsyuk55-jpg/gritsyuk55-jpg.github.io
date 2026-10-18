@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Калькулятор · Дома@Фундаменты</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@500;600;700&family=Golos+Text:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"><link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap"><header class="top"><a class="brand" href="index.html" aria-label="Дома@Фундаменты, главная"><svg viewBox="0 0 30 30" aria-hidden="true"><rect x="2" y="6" width="26" height="6" fill="currentColor"/><rect x="5" y="12" width="4" height="15" fill="var(--accent)"/><rect x="13" y="12" width="4" height="15" fill="var(--accent)"/><rect x="21" y="12" width="4" height="15" fill="var(--accent)"/></svg><span>Дома<b>@</b>Фундаменты</span></a><nav aria-label="Разделы"><a href="uslugi.html">Услуги</a><a href="ceny.html" aria-current="page">Цены</a><a href="process.html">Как работаем</a><a href="obekty.html">Объекты и отзывы</a><a href="znaniya.html">База знаний</a><a class="nav-cta" href="zayavka.html">Оставить заявку</a></nav></header><main><div class="page-head"><p class="crumbs"><a href="index.html">Главная</a> / <a href="ceny.html">Цены</a> / Калькулятор</p><h1>Примерный расчёт</h1><p class="lead">Ориентир по сваям и монолитной плите на основе реальных смет и коммерческих предложений 2025–2026 годов по Московской области. Это ориентир для разговора, а не проект.</p></div>
+<section class="block" style="border-top:0;padding-top:24px">
+  <div class="actions" style="margin-bottom:24px"><button class="btn" id="btn-svai" type="button">Сваи</button><button class="btn ghost" id="btn-plita" type="button">Плита</button><button class="btn ghost" id="btn-pk" type="button">Перекрытие</button></div>
+  <div class="calc" id="pane-svai">
+  <div class="form" style="grid-template-columns:1fr">
+    <div class="field"><label for="per">Периметр дома, м</label><input id="per" inputmode="decimal" value="36"><span class="hint">Сумма длин наружных стен.</span></div>
+    <div class="field"><label for="inner">Внутренние несущие стены, м</label><input id="inner" inputmode="decimal" value="10"><span class="hint">Если их нет, оставьте 0.</span></div>
+    <div class="field"><label for="step">Шаг свай, м</label><input id="step" inputmode="decimal" value="2"><span class="hint">Расстояние между сваями. Точное значение даёт расчёт.</span></div>
+    <div class="field"><label for="plen">Длина сваи, м</label><select id="plen"><option value="4">4 м (С40.20, 200×200)</option><option value="5" selected>5 м (С50.20, 200×200)</option><option value="7">7 м (С70.30, 300×300)</option><option value="8">8 м (С80.30, 300×300)</option></select><span class="hint">Длину и сечение назначает расчёт по грунту; здесь — для ориентира по цене.</span></div>
+    <div class="field"><label for="rprice">Ростверк, ₽ за 1 м</label><input id="rprice" inputmode="decimal" value="6600"><span class="hint">Обвязка свай с земляными работами, утеплением и гидроизоляцией; цену можно изменить.</span></div>
+  </div>
+  <div class="result" id="res" aria-live="polite">
+    <p class="eyebrow">Свай примерно</p><p class="big"><span id="piles">0</span> <small>шт.</small></p>
+    <div class="pairs"><div><span>Линии под стенами</span><b id="len">0</b></div><div><span>Свая</span><b id="pileinfo">—</b></div><div><span>Погружение</span><b id="drive">—</b></div><div><span>Геодезия, 3 выезда, и мобилизация</span><b id="mob">—</b></div><div><span>Опалубка ростверка</span><b id="form">—</b></div><div><span>Бетононасос, 1 смена</span><b>63 900 ₽</b></div><div><span>Свайное поле, итог</span><b id="total">—</b></div><div><span>Ростверк</span><b id="rost">по расчёту</b></div></div>
+    <p class="hint">База — фактические КП подрядчиков и заводские цены ЖБИ (Московская область, сентябрь 2026); в ценах учтены наценка и налоги. Количество свай уточнит расчёт по грунту и весу дома.</p>
+    <textarea id="restext" class="out" readonly rows="7" aria-label="Текст расчёта" style="min-height:140px"></textarea>
+    <div class="actions"><button class="btn ghost" id="copy" type="button">Скопировать</button><a class="btn" href="zayavka.html">Оставить заявку</a></div>
+  </div></div>
+  <div class="calc" id="pane-plita" hidden>
+  <div class="form" style="grid-template-columns:1fr">
+    <div class="field"><label for="sarea">Площадь дома, м²</label><input id="sarea" inputmode="decimal" value="120"><span class="hint">Общая площадь всех этажей.</span></div>
+    <div class="field"><label for="sfloors">Этажность</label><select id="sfloors"><option value="1">1 этаж</option><option value="2" selected>2 этажа</option></select></div>
+    <div class="field"><label for="sroof">Кровля</label><select id="sroof"><option value="скатная" selected>Скатная</option><option value="плоская">Плоская (эксплуатируемая)</option></select><span class="hint">Плоская кровля тяжелее — плита 300 мм вместо 250 мм.</span></div>
+  </div>
+  <div class="result" id="resp" aria-live="polite">
+    <p class="eyebrow">Плита под ключ, ориентир</p><p class="big" id="ptotal">—</p>
+    <div class="pairs"><div><span>Пятно застройки (плита)</span><b id="parea">—</b></div><div><span>Толщина плиты</span><b id="pth">—</b></div><div><span>Бетон В25</span><b id="pconcrete">—</b></div><div><span>Цена за м² плиты</span><b id="prate">—</b></div></div>
+    <p class="hint">Диапазон — по рабочим сметам реальных объектов 2025 года (Ленинградская и Московская области): фундамент «под ключ» с подготовкой, гидроизоляцией, утеплением и армированием. Срок устройства — 1–2 недели работ плюс набор прочности. Точная цена — по расчёту на геологии.</p>
+    <textarea id="restext2" class="out" readonly rows="7" aria-label="Текст расчёта" style="min-height:140px"></textarea>
+    <div class="actions"><button class="btn ghost" id="copy2" type="button">Скопировать</button><a class="btn" href="zayavka.html">Оставить заявку</a></div>
+  </div></div>
+  <div class="calc" id="pane-pk" hidden>
+  <div class="form" style="grid-template-columns:1fr">
+    <div class="field"><label for="pkL">Длина перекрытия (вдоль плит), м</label><input id="pkL" inputmode="decimal" value="9"><span class="hint">Сторона, которую заполняют ширины плит.</span></div>
+    <div class="field"><label for="pkW">Пролёт (перекрывает плита), м</label><input id="pkW" inputmode="decimal" value="4,5"><span class="hint">Плита должна перекрывать пролёт целиком — длина плиты не меньше пролёта.</span></div>
+    <div class="field"><label for="pkT">Плита</label><select id="pkT"><option value="3510">ПБ-35-10-12,5 (3,5 × 1,0 м) — 16 260 ₽</option><option value="3512">ПБ-35-12-12,5 (3,5 × 1,2 м) — 19 660 ₽</option><option value="3515">ПБ-35-15-12,5 (3,5 × 1,5 м) — 25 010 ₽</option><option value="3710">ПБ-37-10-12,5 (3,7 × 1,0 м) — 17 900 ₽</option><option value="3712">ПБ-37-12-12,5 (3,7 × 1,2 м) — 21 120 ₽</option><option value="3715">ПБ-37-15-12,5 (3,7 × 1,5 м) — 26 840 ₽</option><option value="4512" selected>ПБ-45-12-12,5 (4,5 × 1,2 м) — 26 000 ₽</option><option value="4515">ПБ-45-15-12,5 (4,5 × 1,5 м) — 32 970 ₽</option></select><span class="hint">База — заводские цены счёта № 1744 от 28.09.2026 (ЖБИ ПрофСтройКомплект); в цене учтены наценка и налоги.</span></div>
+  </div>
+  <div class="result" id="respk" aria-live="polite">
+    <p class="eyebrow">Плит на перекрытие</p><p class="big"><span id="pkn">0</span> <small>шт.</small></p>
+    <div class="pairs"><div><span>Раскладка</span><b id="pkgrid">—</b></div><div><span>Плиты</span><b id="pksum">—</b></div><div><span>Монтаж и заделка швов</span><b id="pkwork">—</b></div><div><span>Доставка манипулятором</span><b>51 100 ₽</b></div><div><span>Кран 31 м, 2 смены</span><b>131 400 ₽</b></div><div><span>Итого</span><b id="pktotal">—</b></div></div>
+    <p class="hint">Плиты — ≈ 4 650–4 890 ₽/м² в зависимости от типоразмера; монтаж и заделка швов — 1 100 ₽/м²; доставка манипулятором и кран — по расценкам смет 2025–2026 годов. В ценах учтены наценка и налоги. Раскладку и опирание уточняет проект; под нестандартные пролёты плиты делают под заказ.</p>
+    <textarea id="restext3" class="out" readonly rows="6" aria-label="Текст расчёта" style="min-height:130px"></textarea>
+    <div class="actions"><button class="btn ghost" id="copy3" type="button">Скопировать</button><a class="btn" href="zayavka.html">Оставить заявку</a></div>
+  </div></div>
+</section></main><footer class="foot"><div class="foot-nav"><a href="uslugi.html">Услуги</a><a href="ceny.html">Цены</a><a href="process.html">Как работаем</a><a href="obekty.html">Объекты и отзывы</a><a href="znaniya.html">База знаний</a><a href="zayavka.html">Заявка</a></div><span>© Дома@Фундаменты · ИП Грицюк Александр Валерьевич · ИНН 583502101845 · ОГРНИП 323583500021547</span><span>Материалы сайта носят справочный характер. Параметры фундамента определяются расчётом по результатам изысканий.</span></footer></div>
+<script>
+(function () {
+  function num(id) { var v = parseFloat(String(document.getElementById(id).value).replace(',', '.')); return isFinite(v) && v > 0 ? v : 0; }
+  function fmt(n) { return Math.round(n).toLocaleString('ru-RU'); }
+  function fmtM(n) { return n >= 1000000 ? (Math.round(n / 100000) / 10).toLocaleString('ru-RU') + ' млн ₽' : fmt(n) + ' ₽'; }
+  function rng(a, b) { return fmt(a) + ' – ' + fmt(b) + ' ₽'; }
+
+  var PILES = { '4': { marka: 'С40.20-6', sec: '200×200 мм', price: 10100 }, '5': { marka: 'С50.20-6', sec: '200×200 мм', price: 16550 }, '7': { marka: 'С70.30-6', sec: '300×300 мм', price: 23400 }, '8': { marka: 'С80.30-6', sec: '300×300 мм', price: 25100 } };
+  var DRIVE = [1305, 1460], GEO = [164250, 191700], MOB = 91300, FORM = 2190, PUMP = 63900;
+  var PB = { '3510': { name: 'ПБ-35-10-12,5', L: 3.5, W: 1.0, p: 16260 }, '3512': { name: 'ПБ-35-12-12,5', L: 3.5, W: 1.2, p: 19660 }, '3515': { name: 'ПБ-35-15-12,5', L: 3.5, W: 1.5, p: 25010 }, '3710': { name: 'ПБ-37-10-12,5', L: 3.7, W: 1.0, p: 17900 }, '3712': { name: 'ПБ-37-12-12,5', L: 3.7, W: 1.2, p: 21120 }, '3715': { name: 'ПБ-37-15-12,5', L: 3.7, W: 1.5, p: 26840 }, '4512': { name: 'ПБ-45-12-12,5', L: 4.5, W: 1.2, p: 26000 }, '4515': { name: 'ПБ-45-15-12,5', L: 4.5, W: 1.5, p: 32970 } };
+  var WORK = 1100, DIR = 51100, CRANE = 65700;
+
+  var out = document.getElementById('res'), txt = document.getElementById('restext'), copy = document.getElementById('copy');
+  function run() {
+    var p = num('per'), inner = num('inner'), step = num('step'), rp = num('rprice');
+    var plen = document.getElementById('plen').value, pile = PILES[plen];
+    if (!p || !step) { out.hidden = true; return; }
+    var L = p + inner, piles = Math.max(4, Math.ceil(L / step));
+    var price = pile.price;
+    var psum = piles * price;
+    var dmin = piles * parseFloat(plen) * DRIVE[0], dmax = piles * parseFloat(plen) * DRIVE[1];
+    var gmin = GEO[0] + MOB, gmax = GEO[1] + MOB;
+    var form = L * FORM, pump = PUMP;
+    var tmin = psum + dmin + gmin + form + pump, tmax = psum + dmax + gmax + form + pump;
+    var rmin = rp ? L * rp : 0, rmax = rmin;
+    document.getElementById('piles').textContent = piles;
+    document.getElementById('len').textContent = L.toFixed(1).replace('.', ',') + ' м';
+    document.getElementById('pileinfo').textContent = pile.marka + ', ' + pile.sec + ', ' + fmt(price) + ' ₽/шт';
+    document.getElementById('drive').textContent = fmt(dmin) + ' – ' + fmt(dmax) + ' ₽';
+    document.getElementById('mob').textContent = fmt(gmin) + ' – ' + fmt(gmax) + ' ₽';
+    document.getElementById('form').textContent = fmt(form) + ' ₽';
+    document.getElementById('total').textContent = rng(tmin + rmin, tmax + rmax);
+    document.getElementById('rost').textContent = rp ? fmt(rmin) + ' ₽ (' + L.toFixed(1).replace('.', ',') + ' м)' : 'по расчёту';
+    var lines = ['Предварительный расчёт свайного фундамента (ориентир):', 'Линии под стенами: ' + L.toFixed(1).replace('.', ',') + ' м', 'Свай: ' + piles + ' шт. (' + pile.marka + ', ' + pile.sec + ', длина ' + plen + ' м)', 'Свайное поле с геодезией (3 выезда), опалубкой и бетононасосом: ' + rng(tmin, tmax), 'Средние сроки: забивка 1–2 дня, ростверк 3–4 дня + 7 дней набор прочности', 'База: фактические КП подрядчика; цены включают наценку и налоги.'];
+    if (rp) { lines.push('Ростверк ' + L.toFixed(1).replace('.', ',') + ' м: ' + fmt(rmin) + ' ₽'); lines.push('Итого с ростверком: ' + rng(tmin + rmin, tmax + rmax)); }
+    else { lines.push('Ростверк: цена по расчёту'); }
+    lines.push('Ориентир по реальным КП и сметам 2026 года, МО. Не является офертой.');
+    txt.value = lines.join('\n');
+    out.hidden = false;
+  }
+
+  var outp = document.getElementById('resp'), txtp = document.getElementById('restext2'), copy2 = document.getElementById('copy2');
+  function runP() {
+    var area = num('sarea');
+    if (!area) { outp.hidden = true; return; }
+    var floors = document.getElementById('sfloors').value, roof = document.getElementById('sroof').value;
+    var plate = area / floors * 1.3;
+    var heavy = (floors === '2' && roof === 'плоская');
+    var th = heavy ? 300 : 250;
+    var rmin = heavy ? 22400 : 14600, rmax = heavy ? 27000 : 17000;
+    var beton = plate * (heavy ? 0.31 : 0.26);
+    var tmin = plate * rmin, tmax = plate * rmax;
+    document.getElementById('parea').textContent = '≈ ' + Math.round(plate) + ' м²';
+    document.getElementById('pth').textContent = th + ' мм';
+    document.getElementById('pconcrete').textContent = '≈ ' + Math.round(beton) + ' м³';
+    document.getElementById('prate').textContent = fmt(rmin / 1000) + ' – ' + fmt(rmax / 1000) + ' тыс. ₽/м²';
+    document.getElementById('ptotal').textContent = fmtM(tmin) + ' – ' + fmtM(tmax);
+    txtp.value = ['Предварительный расчёт плитного фундамента (ориентир):', 'Дом ' + Math.round(area) + ' м², ' + floors + ' эт., кровля ' + roof, 'Плита: ≈ ' + Math.round(plate) + ' м², толщина ' + th + ' мм', 'Бетон В25: ≈ ' + Math.round(beton) + ' м³', 'Фундамент под ключ: ' + rng(tmin, tmax), 'Срок устройства: 1–2 недели + набор прочности', 'Ориентир по рабочим сметам 2025 года. Не является офертой.'].join('\n');
+    outp.hidden = false;
+  }
+
+  var outpk = document.getElementById('respk'), txtpk = document.getElementById('restext3');
+  function runPK() {
+    var rl = num('pkL'), rw = num('pkW'), t = PB[document.getElementById('pkT').value];
+    if (!rl || !rw) { outpk.hidden = true; return; }
+    var rows = Math.ceil(rl / t.W), cols = Math.ceil(rw / t.L), n = rows * cols, sum = n * t.p;
+    var work = Math.round(n * t.L * t.W * WORK), dir = DIR, crane = CRANE * 2;
+    document.getElementById('pkn').textContent = n;
+    document.getElementById('pkgrid').textContent = rows + ' × ' + cols + ' (плита ' + String(t.L).replace('.', ',') + ' × ' + String(t.W).replace('.', ',') + ' м)';
+    document.getElementById('pkwork').textContent = fmt(work) + ' ₽ (' + (Math.round(n * t.L * t.W * 10) / 10).toLocaleString('ru-RU') + ' м²)';
+    document.getElementById('pktotal').textContent = rw > t.L ? '—' : fmt(sum + work + dir + crane) + ' ₽';
+    document.getElementById('pksum').textContent = rw > t.L ? 'плита короче пролёта — нужен типоразмер от ' + String(Math.ceil(rw * 10) / 10).replace('.', ',') + ' м (свыше 4,5 м — под заказ)' : fmt(sum) + ' ₽ (' + fmt(Math.round(t.p / (t.L * t.W))) + ' ₽/м²)';
+    txtpk.value = ['Расчёт перекрытия из плит ПБ (ориентир):', 'Перекрытие: ' + rl.toFixed(1).replace('.', ',') + ' × ' + rw.toFixed(1).replace('.', ',') + ' м', 'Плита: ' + t.name + ' (' + String(t.L).replace('.', ',') + ' × ' + String(t.W).replace('.', ',') + ' м)', 'Плит: ' + n + ' шт. на ' + fmt(sum) + ' ₽', 'Монтаж и заделка швов: ' + fmt(work) + ' ₽', 'Доставка манипулятором: 51 100 ₽; кран 31 м, 2 смены: 131 400 ₽', 'Итого: ' + fmt(sum + work + dir + crane) + ' ₽', 'Средние сроки: монтаж плит 1–2 дня, заделка швов ещё 1–2 дня', 'База: заводские цены ЖБИ (счёт № 1744 от 28.09.2026); цены включают наценку и налоги.'];
+    outpk.hidden = false;
+  }
+
+  function showTab(t) {
+    document.getElementById('pane-svai').hidden = t !== 'svai';
+    document.getElementById('pane-plita').hidden = t !== 'plita';
+    document.getElementById('pane-pk').hidden = t !== 'pk';
+    document.getElementById('btn-svai').className = t === 'svai' ? 'btn' : 'btn ghost';
+    document.getElementById('btn-plita').className = t === 'plita' ? 'btn' : 'btn ghost';
+    document.getElementById('btn-pk').className = t === 'pk' ? 'btn' : 'btn ghost';
+  }
+  document.getElementById('btn-svai').addEventListener('click', function () { showTab('svai'); });
+  document.getElementById('btn-plita').addEventListener('click', function () { showTab('plita'); });
+  document.getElementById('btn-pk').addEventListener('click', function () { showTab('pk'); });
+
+  ['per', 'inner', 'step', 'rprice', 'plen'].forEach(function (id) { var el = document.getElementById(id); el.addEventListener('input', run); el.addEventListener('change', run); });
+  ['sarea', 'sfloors', 'sroof'].forEach(function (id) { var el = document.getElementById(id); el.addEventListener('input', runP); el.addEventListener('change', runP); });
+  ['pkL', 'pkW', 'pkT'].forEach(function (id) { var el = document.getElementById(id); el.addEventListener('input', runPK); el.addEventListener('change', runPK); });
+  function bindCopy(btn, area) {
+    document.getElementById(btn).addEventListener('click', function () {
+      area.select();
+      try { navigator.clipboard.writeText(area.value).then(function () { }, function () { document.execCommand && document.execCommand('copy'); }); }
+      catch (e) { try { document.execCommand('copy'); } catch (e2) {} }
+    });
+  }
+  bindCopy('copy', txt);
+  bindCopy('copy2', txtp);
+  bindCopy('copy3', txtpk);
+  run();
+  runP();
+  runPK();
+})();
+</script>
+</body>
+</html>
