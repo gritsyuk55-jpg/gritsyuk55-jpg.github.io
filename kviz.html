@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Квиз: подбор фундамента за 1 минуту · Дома@Фундаменты</title>
+<meta name="description" content="Ответьте на 6 вопросов — подскажем оптимальный тип фундамента для вашего участка и геологии. Бесплатно, ответ в течение дня.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@500;600;700&family=Golos+Text:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"><link rel="stylesheet" href="style.css">
+<style>
+  .qbar { height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; margin-bottom: 24px; }
+  .qbar > i { display: block; height: 100%; background: var(--accent); width: 0; transition: width .3s; }
+  .qsteps { display: flex; flex-direction: column; gap: 16px; }
+  .qstep { display: none; }
+  .qstep.on { display: block; }
+  .qopts { display: flex; flex-direction: column; gap: 10px; }
+  .qopts label { display: block; padding: 14px 16px; border: 1px solid var(--line); border-radius: 6px; cursor: pointer; }
+  .qopts input { margin-right: 10px; }
+  .qnav { display: flex; gap: 12px; margin-top: 16px; }
+</style>
+</head>
+<body>
+<div class="wrap"><header class="top"><a class="brand" href="index.html" aria-label="Дома@Фундаменты, главная"><svg viewBox="0 0 30 30" aria-hidden="true"><rect x="2" y="6" width="26" height="6" fill="currentColor"/><rect x="5" y="12" width="4" height="15" fill="var(--accent)"/><rect x="13" y="12" width="4" height="15" fill="var(--accent)"/><rect x="21" y="12" width="4" height="15" fill="var(--accent)"/></svg><span>Дома<b>@</b>Фундаменты</span></a><nav aria-label="Разделы"><a href="uslugi.html">Услуги</a><a href="ceny.html">Цены</a><a href="process.html">Как работаем</a><a href="obekty.html">Объекты и отзывы</a><a href="znaniya.html">База знаний</a><a class="nav-cta" href="zayavka.html">Оставить заявку</a></nav></header><main><div class="page-head"><p class="crumbs"><a href="index.html">Главная</a> / Квиз</p><h1>Подбор фундамента за 1 минуту</h1><p class="lead">Ответьте на 6 вопросов — подскажем оптимальный тип фундамента под ваш участок и соберём заявку. Бесплатно, без обязательств.</p></div>
+<section class="block" style="border-top:0;padding-top:24px">
+  <div class="qbar"><i id="qbar"></i></div>
+  <div class="qsteps">
+    <div class="qstep on"><h2>Что нужно?</h2>
+      <div class="qopts">
+        <label><input type="radio" name="goal" value="Фундамент под ключ" checked>Фундамент под ключ</label>
+        <label><input type="radio" name="goal" value="Только расчёт и проект">Только расчёт и проект</label>
+        <label><input type="radio" name="goal" value="Пока не знаю — нужен совет">Пока не знаю — нужен совет</label>
+      </div>
+    </div>
+    <div class="qstep"><h2>Участок</h2>
+      <div class="qopts">
+        <label><input type="radio" name="plot" value="Есть, документы готовы" checked>Есть, документы готовы</label>
+        <label><input type="radio" name="plot" value="Есть, документы не готовы">Есть, документы не готовы</label>
+        <label><input type="radio" name="plot" value="Только выбираю участок">Только выбираю участок</label>
+      </div>
+    </div>
+    <div class="qstep"><h2>Площадь дома</h2>
+      <div class="qopts">
+        <label><input type="radio" name="area" value="до 80 м²" checked>До 80 м²</label>
+        <label><input type="radio" name="area" value="80–120 м²">80–120 м²</label>
+        <label><input type="radio" name="area" value="120–180 м²">120–180 м²</label>
+        <label><input type="radio" name="area" value="больше 180 м²">Больше 180 м²</label>
+      </div>
+    </div>
+    <div class="qstep"><h2>Материал стен</h2>
+      <div class="qopts">
+        <label><input type="radio" name="walls" value="Газобетон" checked>Газобетон</label>
+        <label><input type="radio" name="walls" value="Каркас">Каркас</label>
+        <label><input type="radio" name="walls" value="Брус">Брус</label>
+        <label><input type="radio" name="walls" value="Кирпич">Кирпич</label>
+      </div>
+    </div>
+    <div class="qstep"><h2>Геология участка</h2>
+      <div class="qopts">
+        <label><input type="radio" name="geo" value="Есть отчёт по геологии" checked>Есть отчёт</label>
+        <label><input type="radio" name="geo" value="Нет отчёта по геологии">Нет отчёта</label>
+        <label><input type="radio" name="geo" value="Не знаю">Не знаю</label>
+      </div>
+    </div>
+    <div class="qstep"><h2>Куда отправить результат</h2>
+      <div class="form" style="grid-template-columns:1fr">
+        <div class="field"><label for="qname">Имя</label><input id="qname"></div>
+        <div class="field"><label for="qcontact">Телефон или мессенджер</label><input id="qcontact" inputmode="tel"></div>
+        <p class="hint">Заявка ни к чему не обязывает: ответим в течение дня, расчёт бесплатный.</p>
+      </div>
+    </div>
+  </div>
+  <div class="qnav">
+    <button class="btn ghost" id="qprev" type="button" style="visibility:hidden">← Назад</button>
+    <button class="btn" id="qnext" type="button">Далее →</button>
+  </div>
+</section>
+<section class="block" id="qresult" hidden>
+  <h2>Ваша заявка собрана</h2>
+  <textarea id="qtext" class="out" readonly rows="10" aria-label="Текст заявки"></textarea>
+  <p class="hint">Пришлите этот текст нам в мессенджер — ответим в течение дня. Контакты: Telegram · WhatsApp · MAX · <a href="zayavka.html">форма заявки</a>.</p>
+  <div class="actions"><button class="btn ghost" id="qcopy" type="button">Скопировать</button><a class="btn" href="zayavka.html">Оставить заявку</a></div>
+</section>
+</main><footer class="foot"><div class="foot-nav"><a href="uslugi.html">Услуги</a><a href="ceny.html">Цены</a><a href="process.html">Как работаем</a><a href="obekty.html">Объекты и отзывы</a><a href="znaniya.html">База знаний</a><a href="zayavka.html">Заявка</a></div><span>© Дома@Фундаменты · ИП Грицюк Александр Валерьевич · ИНН 583502101845 · ОГРНИП 323583500021547</span><span>Материалы сайта носят справочный характер. Параметры фундамента определяются расчётом по результатам изысканий.</span></footer></div>
+<script>
+(function () {
+  var steps = [].slice.call(document.querySelectorAll('.qstep'));
+  var bar = document.getElementById('qbar');
+  var cur = 0;
+  function show(i) {
+    steps.forEach(function (s, k) { s.classList.toggle('on', k === i); });
+    bar.style.width = Math.round((i + 1) / steps.length * 100) + '%';
+    document.getElementById('qprev').style.visibility = i === 0 ? 'hidden' : 'visible';
+    document.getElementById('qnext').textContent = i === steps.length - 1 ? 'Собрать заявку' : 'Далее →';
+  }
+  function val(name) {
+    var el = document.querySelector('input[name="' + name + '"]:checked');
+    return el ? el.value : '';
+  }
+  function collect() {
+    return ['Заявка-квиз с сайта Дома@Фундаменты',
+      'Что нужно: ' + val('goal'),
+      'Участок: ' + val('plot'),
+      'Площадь дома: ' + val('area'),
+      'Стены: ' + val('walls'),
+      'Геология: ' + val('geo'),
+      'Имя: ' + document.getElementById('qname').value.trim(),
+      'Контакт: ' + document.getElementById('qcontact').value.trim(),
+      'Точный расчёт — бесплатно, после разбора геологии.'].join('\n');
+  }
+  document.getElementById('qnext').addEventListener('click', function () {
+    if (cur === steps.length - 1) {
+      var ta = document.getElementById('qtext');
+      ta.value = collect();
+      var res = document.getElementById('qresult');
+      res.hidden = false;
+      res.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+    cur++; show(cur);
+  });
+  document.getElementById('qprev').addEventListener('click', function () {
+    if (cur > 0) { cur--; show(cur); }
+  });
+  document.getElementById('qcopy').addEventListener('click', function () {
+    var ta = document.getElementById('qtext');
+    ta.select();
+    try { navigator.clipboard.writeText(ta.value); } catch (e) { try { document.execCommand('copy'); } catch (e2) {} }
+  });
+  show(0);
+})();
+</script>
+</body>
+</html>
