@@ -84,6 +84,17 @@
     var form = L * FORM, pump = PUMP;
     var tmin = psum + dmin + gmin + form + pump, tmax = psum + dmax + gmax + form + pump;
     var rmin = rp ? L * rp : 0, rmax = rmin;
+    if (piles > 400) {
+      document.getElementById('piles').textContent = 'много';
+      document.getElementById('len').textContent = L.toFixed(1).replace('.', ',') + ' м';
+      document.getElementById('pileinfo').textContent = 'проверьте периметр — столько свай для дома не бывает';
+      document.getElementById('drive').textContent = '—';
+      document.getElementById('mob').textContent = '—';
+      document.getElementById('total').textContent = '—';
+      document.getElementById('rost').textContent = 'по расчёту';
+      out.hidden = false;
+      return;
+    }
     document.getElementById('piles').textContent = piles;
     document.getElementById('len').textContent = L.toFixed(1).replace('.', ',') + ' м';
     document.getElementById('pileinfo').textContent = pile.marka + ', ' + pile.sec + ', ' + fmt(price) + ' ₽/шт';
