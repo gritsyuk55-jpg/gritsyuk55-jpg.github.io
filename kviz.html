@@ -135,8 +135,8 @@
     try { navigator.clipboard.writeText(ta.value); } catch (e) { try { document.execCommand('copy'); } catch (e2) {} }
   });
   // --- Прямая отправка квиза в Telegram через бота (активируется после заполнения TG_TOKEN и TG_CHAT) ---
-  var TG_TOKEN = '';
-  var TG_CHAT = '';
+  var TG_TOKEN = '9265950039:AAEkLCTF-Z9mCqrJjJBO4aXq83UsBya9HrY';
+  var TG_CHAT = '352355479';
   var qsend = document.getElementById('qsend'), qsent = document.getElementById('qsent'), qhint = document.getElementById('qhint');
   if (TG_TOKEN && TG_CHAT) qsend.hidden = false;
   qsend.addEventListener('click', function () {
