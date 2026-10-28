@@ -29,12 +29,13 @@
   <div class="field"><label for="start">Когда планируете начать</label><select id="start"><option>В ближайший месяц</option><option>В течение трёх месяцев</option><option>Позже</option><option>Пока присматриваюсь</option></select></div>
   <div class="field wide"><label for="comment">Комментарий</label><textarea id="comment"></textarea></div>
   <div class="field wide"><label class="check"><input id="consent" type="checkbox"><span>Согласен на обработку персональных данных для связи по заявке.</span></label></div>
-  <div class="field wide"><p class="err" id="err" hidden role="alert"></p><div class="actions"><button class="btn" type="submit">Собрать заявку</button><button class="btn ghost" id="wa" type="button">Отправить в WhatsApp</button><button class="btn ghost" id="tg" type="button">Отправить в Telegram</button></div><p class="hint">Заявка ни к чему не обязывает: сначала обсудим участок и варианты фундамента. В Telegram откроется окно отправки — выберите чат Александра Грицюк (@Gritsyuk_A).</p></div>
+  <div class="field wide"><p class="err" id="err" hidden role="alert"></p><div class="actions"><button class="btn" id="send" type="button" hidden>Отправить заявку</button><button class="btn" type="submit">Показать текст заявки</button><button class="btn ghost" id="wa" type="button">Отправить в WhatsApp</button><button class="btn ghost" id="tg" type="button">Отправить в Telegram</button></div><p class="hint">Заявка ни к чему не обязывает: сначала обсудим участок и варианты фундамента. В Telegram откроется окно отправки — выберите чат Александра Грицюк (@Gritsyuk_A).</p></div>
 </form>
+<p id="sent" hidden style="max-width:820px;color:var(--accent);font-weight:600"></p>
 <div id="outbox" hidden style="max-width:820px;display:flex;flex-direction:column;gap:12px;margin-top:24px">
   <h2>Ваша заявка</h2><textarea id="outtext" class="out" readonly rows="10" aria-label="Текст заявки"></textarea>
   <div class="actions"><button class="btn" id="copy" type="button">Скопировать</button></div>
-  <p class="hint">Мессенджер не открылся? Скопируйте текст и отправьте нам сами — контакты ниже.</p></div>
+  <p class="hint" id="outhint">Мессенджер не открылся? Скопируйте текст и отправьте нам сами — контакты ниже.</p></div>
 </section>
 <section class="block"><h2>Контакты</h2>
   <div class="contact"><dl>
@@ -97,6 +98,40 @@
     txt.select();
     try { navigator.clipboard.writeText(txt.value).then(function () { copy.textContent = 'Скопировано'; }, function () { document.execCommand && document.execCommand('copy'); }); }
     catch (e) { try { document.execCommand('copy'); } catch (e2) {} }
+  });
+  // --- Прямая отправка в Telegram через бота (активируется после заполнения TG_TOKEN и TG_CHAT) ---
+  var TG_TOKEN = '';
+  var TG_CHAT = '';
+  var sendBtn = document.getElementById('send'), sent = document.getElementById('sent'),
+      outHint = document.getElementById('outhint'), lead = document.querySelector('.lead');
+  if (TG_TOKEN && TG_CHAT) {
+    sendBtn.hidden = false;
+    if (lead) lead.textContent = 'Заполните, что знаете. Остальное уточним сами. Нажмите «Отправить заявку» — она придёт инженеру в Telegram.';
+  }
+  sendBtn.addEventListener('click', function () {
+    var t = buildText();
+    if (!t) return;
+    sendBtn.disabled = true; sendBtn.textContent = 'Отправляем…';
+    var ctrl = window.AbortController ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 12000) : null;
+    fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: TG_CHAT, text: t }),
+      signal: ctrl ? ctrl.signal : undefined
+    }).then(function (r) { return r.json(); }).then(function (j) {
+      if (timer) clearTimeout(timer);
+      if (j && j.ok) {
+        err.hidden = true; box.hidden = true; sent.hidden = false;
+        sent.textContent = 'Заявка отправлена. Александр ответит в течение дня. Ускорить можно в WhatsApp или Telegram: +7 906 043-33-60.';
+        sendBtn.textContent = 'Отправлено';
+      } else { throw new Error('api'); }
+    }).catch(function () {
+      if (timer) clearTimeout(timer);
+      sendBtn.disabled = false; sendBtn.textContent = 'Отправить заявку';
+      outHint.textContent = 'Не удалось отправить напрямую — скопируйте текст и отправьте нам в WhatsApp или Telegram (кнопки выше или контакты ниже).';
+      show(t); txt.focus();
+    });
   });
 })();
 </script>
