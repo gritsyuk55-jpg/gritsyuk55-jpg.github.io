@@ -83,9 +83,10 @@
 </section>
 <section class="block" id="qresult" hidden>
   <h2>Ваша заявка собрана</h2>
+  <p id="qsent" hidden style="color:var(--accent);font-weight:600"></p>
   <textarea id="qtext" class="out" readonly rows="10" aria-label="Текст заявки"></textarea>
-  <p class="hint">Пришлите этот текст нам в мессенджер — ответим в течение дня. Контакты: Telegram · WhatsApp · MAX · <a href="zayavka.html">форма заявки</a>.</p>
-  <div class="actions"><button class="btn ghost" id="qcopy" type="button">Скопировать</button><a class="btn" href="zayavka.html">Оставить заявку</a></div>
+  <p class="hint" id="qhint">Пришлите этот текст нам в мессенджер — ответим в течение дня. Контакты: Telegram · WhatsApp · MAX · <a href="zayavka.html">форма заявки</a>.</p>
+  <div class="actions"><button class="btn" id="qsend" type="button" hidden>Отправить заявку</button><button class="btn ghost" id="qcopy" type="button">Скопировать</button><a class="btn ghost" href="zayavka.html">Оставить заявку</a></div>
 </section>
 </main><footer class="foot"><div class="foot-nav"><a href="uslugi.html">Услуги</a><a href="ceny.html">Цены</a><a href="process.html">Как работаем</a><a href="obekty.html">Объекты и отзывы</a><a href="znaniya.html">База знаний</a><a href="zayavka.html">Заявка</a></div><span>© Дома@Фундаменты · ИП Грицюк Александр Валерьевич · ИНН 583502101845 · ОГРНИП 323583500021547</span><span>Материалы сайта носят справочный характер. Параметры фундамента определяются расчётом по результатам изысканий.</span></footer></div>
 <script>
@@ -132,6 +133,36 @@
     var ta = document.getElementById('qtext');
     ta.select();
     try { navigator.clipboard.writeText(ta.value); } catch (e) { try { document.execCommand('copy'); } catch (e2) {} }
+  });
+  // --- Прямая отправка квиза в Telegram через бота (активируется после заполнения TG_TOKEN и TG_CHAT) ---
+  var TG_TOKEN = '';
+  var TG_CHAT = '';
+  var qsend = document.getElementById('qsend'), qsent = document.getElementById('qsent'), qhint = document.getElementById('qhint');
+  if (TG_TOKEN && TG_CHAT) qsend.hidden = false;
+  qsend.addEventListener('click', function () {
+    var t = document.getElementById('qtext').value;
+    if (!t) return;
+    qsend.disabled = true; qsend.textContent = 'Отправляем…';
+    var ctrl = window.AbortController ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 12000) : null;
+    fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: TG_CHAT, text: t }),
+      signal: ctrl ? ctrl.signal : undefined
+    }).then(function (r) { return r.json(); }).then(function (j) {
+      if (timer) clearTimeout(timer);
+      if (j && j.ok) {
+        qsent.hidden = false;
+        qsent.textContent = 'Заявка отправлена. Александр ответит в течение дня. Ускорить можно в WhatsApp или Telegram: +7 906 043-33-60.';
+        qhint.hidden = true;
+        qsend.textContent = 'Отправлено';
+      } else { throw new Error('api'); }
+    }).catch(function () {
+      if (timer) clearTimeout(timer);
+      qsend.disabled = false; qsend.textContent = 'Отправить заявку';
+      qhint.textContent = 'Не удалось отправить напрямую — скопируйте текст и пришлите нам в мессенджер. Контакты: Telegram · WhatsApp · MAX.';
+    });
   });
   show(0);
 })();
